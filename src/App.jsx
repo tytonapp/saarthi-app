@@ -2,34 +2,27 @@ import { useState } from 'react'
 import AddSlot from './components/Sugam/AddSlot'
 import DailyView from './components/Sugam/DailyView'
 import EventForm from './components/Utsav/EventForm'
+import EventList from './components/Utsav/EventList'
+import SaarthiAgent from './components/Agent'
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('sugam')
   const [refresh, setRefresh] = useState(0)
-
   const triggerRefresh = () => setRefresh(prev => prev + 1)
 
   return (
     <div style={styles.app}>
+      <SaarthiAgent refreshTrigger={refresh} />
+      
       <header style={styles.header}>
         <h1>Saarthi</h1>
         <nav style={styles.nav}>
-          <button 
-            style={activeTab === 'sugam' ? styles.activeBtn : styles.navBtn} 
-            onClick={() => setActiveTab('sugam')}
-          >
-            Sugam (Daily)
-          </button>
-          <button 
-            style={activeTab === 'utsav' ? styles.activeBtn : styles.navBtn} 
-            onClick={() => setActiveTab('utsav')}
-          >
-            Utsav (Yearly)
-          </button>
+          <button style={activeTab === 'sugam' ? styles.activeBtn : styles.navBtn} onClick={() => setActiveTab('sugam')}>Sugam</button>
+          <button style={activeTab === 'utsav' ? styles.activeBtn : styles.navBtn} onClick={() => setActiveTab('utsav')}>Utsav</button>
         </nav>
       </header>
 
-      <main style={styles.main}>
+      <main>
         {activeTab === 'sugam' ? (
           <div style={styles.grid}>
             <DailyView refreshTrigger={refresh} />
@@ -37,10 +30,7 @@ export default function App() {
           </div>
         ) : (
           <div style={styles.grid}>
-            <section style={styles.placeholder}>
-              <h3>📅 Upcoming Events</h3>
-              <p>Calendar view coming soon...</p>
-            </section>
+            <EventList refreshTrigger={refresh} />
             <EventForm onRefresh={triggerRefresh} />
           </div>
         )}
@@ -48,6 +38,7 @@ export default function App() {
     </div>
   )
 }
+// ... reuse previous styles
 
 const styles = {
   app: { fontFamily: 'Inter, sans-serif', backgroundColor: '#f5f7fa', minHeight: '100vh', padding: '20px' },
